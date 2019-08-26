@@ -1,0 +1,16 @@
+.idea
+.npmrc
+npm-debug.log
+npm-debug.log.*
+
+.DS_Store
+
+dist/
+node_modules/
+test/e2e/report/
+test/unit/coverage/
+theme/
+.stylelintcache
+package-lock.json
+selenium-debug.log
+selenium-server.log
