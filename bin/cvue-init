@@ -1,0 +1,127 @@
+#!/usr/bin/env node
+
+const path = require('path')
+const download = require('download-git-repo')
+const program = require('commander')
+const exists = require('fs').existsSync
+const ora = require('ora')
+const home = require('user-home')
+const chalk = require('chalk')
+const inquirer = require('inquirer')
+const rm = require('rimraf').sync
+
+const generate = require('../lib/generate')
+const checkVersion = require('../lib/check-version')
+const logger = require('../lib/logger')
+
+/**
+ * Usage.
+ */
+program
+  .usage('[project-name] <template-name>')
+  .option('-c, --clone', 'use git clone')
+
+/**
+ * Help.
+ */
+program
+  .on('--help', () => {
+    console.log()
+    console.log('  Examples:')
+    console.log()
+    console.log(
+      chalk
+        .gray('  # create a new project with an official template')
+    )
+    console.log('  $ cvue init my-project')
+    console.log()
+    console.log(chalk.gray('  # create a new project straight from a github template'))
+    console.log('  $ cvue init my-project username/repo')
+    console.log()
+  })
+
+/**
+ * Help.
+ */
+program
+  .parse(process.argv)
+
+if (program.args.length < 1)
+  return program.help()
+
+/**
+ * Settings.
+ */
+const { args } = program
+const rawName = args[0]
+const template = args[1]
+const hasSlash = template.indexOf('/') > -1
+const inPlace = !rawName || rawName === '.'
+const name = inPlace ? path.relative('../', process.cwd()) : rawName
+const dest = path.resolve(rawName || '.')
+const clone = program.clone || false
+const src = path.join(home, '.cvue-templates')
+
+/**
+ * Padding.
+ */
+process
+  .on('exit', () => {
+    console.log()
+  })
+
+if (inPlace || exists(dest)) {
+  inquirer
+    .prompt([
+      {
+        type: 'confirm',
+        message: inPlace
+          ? 'Generate project in current directory?'
+          : 'Target directory exists. Continue?',
+        name: 'ok'
+      }
+    ])
+    .then((answers) => {
+      if (answers.ok) {
+        run()
+      }
+    })
+    .catch(logger.fatal)
+} else {
+  run()
+}
+
+/**
+ * Download and generate the project.
+ */
+function run() {
+  checkVersion(() => {
+    if (!hasSlash) {
+      // use official templates
+      const branchTemplate = template ? '#' + template : ''
+      const officialTemplate = 'ChowChiKwan/cvue-templates' + branchTemplate
+      downloadAndGenerate(officialTemplate)
+    } else {
+      downloadAndGenerate(template)
+    }
+  })
+}
+
+/**
+ * Download a generate from a template repo.
+ * @param {String} template
+ */
+function downloadAndGenerate(template) {
+  const spinner = ora('downloading template')
+  spinner.start()
+  // Remove if local template exists
+  if (exists(src)) rm(src)
+  download(template, src, { clone }, err => {
+    spinner.stop()
+    if (err) logger.fatal('Failed to download repo ' + template + ': ' + err.message.trim())
+    generate(name, src, dest, err => {
+      if (err) logger.fatal(err)
+      logger.success('Generated "%s".', name)
+    })
+  })
+}

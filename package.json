@@ -1,0 +1,45 @@
+{
+  "name": "cvue-cli",
+  "version": "1.0.0",
+  "description": "A generator CLI for custom-vue projects.",
+  "bin": {
+    "cvue": "./bin/cvue",
+    "cvue init": "./bin/cvue-init"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "async": "^2.4.0",
+    "chalk": "^2.1.0",
+    "commander": "^2.15.1",
+    "consolidate": "^0.15.1",
+    "download-git-repo": "^1.1.0",
+    "handlebars": "^4.0.5",
+    "inquirer": "^6.2.0",
+    "metalsmith": "^2.1.0",
+    "minimatch": "^3.0.0",
+    "multimatch": "^2.1.0",
+    "ora": "^3.0.0",
+    "read-metadata": "^1.0.0",
+    "request": "^2.67.0",
+    "rimraf": "^2.5.0",
+    "semver": "^5.1.0",
+    "user-home": "^2.0.0",
+    "validate-npm-package-name": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ChowChiKwan/cvue-cli.git"
+  },
+  "keywords": [
+    "vue",
+    "cli",
+    "cvue",
+    "custom-vue",
+    "cvue-cli"
+  ],
+  "author": "ChowChiKwan",
+  "license": "MIT"
+}
