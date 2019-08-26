@@ -55,7 +55,7 @@ if (program.args.length < 1)
 const { args } = program
 const rawName = args[0]
 const template = args[1]
-const hasSlash = template.indexOf('/') > -1
+const hasSlash = template && template.indexOf('/') > -1
 const inPlace = !rawName || rawName === '.'
 const name = inPlace ? path.relative('../', process.cwd()) : rawName
 const dest = path.resolve(rawName || '.')

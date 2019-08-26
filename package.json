@@ -9,6 +9,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "bundleDependencies": false,
   "dependencies": {
     "async": "^2.4.0",
