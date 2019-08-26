@@ -1,6 +1,6 @@
 {
-  "name": "cvue-cli",
-  "version": "1.0.0",
+  "name": "cusvue-cli",
+  "version": "1.0.1",
   "description": "A generator CLI for custom-vue projects.",
   "bin": {
     "cvue": "./bin/cvue",
